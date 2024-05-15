@@ -13,4 +13,7 @@ public enum RentalStatus implements Values {
 
     private final Integer value;
     private final String text;  
+
+    // IntegerからRentalStatusへの変換メソッド
+   
 }
