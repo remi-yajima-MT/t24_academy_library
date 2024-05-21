@@ -1,7 +1,9 @@
 package jp.co.metateam.library.model;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 
@@ -63,8 +65,7 @@ public class RentalManageDto {
 
     private Account account;
 
-
-    public String isValidStatus(Integer previousStatus) {
+       public String isValidStatus(Integer previousStatus) {
         if(previousStatus == RentalStatus.RENT_WAIT.getValue() && this.status == RentalStatus.RETURNED.getValue()){
             return "貸出ステータスは「貸出待ち」から「返却済み」に変更できません";
         }else if(previousStatus == RentalStatus.RENTAlING.getValue() && this.status == RentalStatus.RENT_WAIT.getValue()){
@@ -88,11 +89,11 @@ public class RentalManageDto {
     }   
 
     public boolean isValidRentalDate() {
-        LocalDate today = LocalDate.now();
+        Date today = new Date();
         return expectedRentalOn.equals(today); // または必要に応じて条件を調整
     }
      public boolean isValidReturnDate() {
-        LocalDate today = LocalDate.now();
+        Date today = new Date();
         return expectedReturnOn.equals(today); // または必要に応じて条件を調整
     }
 }
