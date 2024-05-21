@@ -224,7 +224,6 @@ public class RentalManageController {
                 rentalManageDto.getStatus() == RentalStatus.RENTAlING.getValue()){
             if (!rentalManageDto.isValidRentalDate()) {
 
-                model.addAttribute("errorMessage", "貸出予定日は現在の日付に設定してください");
                 List<Stock> stockList = this.stockService.findStockAvailableAll();
                 List<Account> accounts = this.accountService.findAll();
                 model.addAttribute("accounts", accounts);
@@ -238,13 +237,13 @@ public class RentalManageController {
                       rentalManageDto.getStatus() == RentalStatus.RETURNED.getValue()) {
             if(!rentalManageDto.isValidReturnDate()) {
 
-                model.addAttribute("errorMessage", "返却予定日は現在の日付に設定してください");
                 List<Stock> stockList = this.stockService.findStockAvailableAll();
                 List<Account> accounts = this.accountService.findAll();
                 model.addAttribute("accounts", accounts);
                 model.addAttribute("stockList", stockList);
                 model.addAttribute("rentalStatus", RentalStatus.values());
-                return "rental/edit";
+                result.addError(new FieldError("errorMessage", "status","返却予定日は現在の日付に設定してください"));
+                throw new Exception("Validetion error");
     }
 }
             // 更新処理

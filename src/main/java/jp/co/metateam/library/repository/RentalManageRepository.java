@@ -33,18 +33,6 @@ public interface RentalManageRepository extends JpaRepository<RentalManage, Long
 
 
 }
-/* 
-    @Query("select rm"
-            + " from RentalManage rm " + " where (rm.status = 0 or rm.status = 1)"
-            + " and rm.stock.id = ?1 "
-            + " and rm.id <> ?2")
-        List<RentalManage> findByStockIdAndStatusIn(String Id,Long rentalId);
- //保存
-    @Query("select rm"
-            + " from RentalManage rm " + " where (rm.status = 0 or rm.status = 1)"
-            + " and rm.stock.id = ?1 ")
-    List<RentalManage> findByStockIdAndStatusIn(String Id);
-
 /*
  * String Id　１２３４５～rentalIdを取得
  * Long rentalId　編集したものを除外
