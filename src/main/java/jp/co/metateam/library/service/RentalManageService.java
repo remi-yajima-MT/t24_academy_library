@@ -3,6 +3,8 @@ package jp.co.metateam.library.service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
+import java.sql.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,7 +80,7 @@ public class RentalManageService {
             rentalManage.setExpectedReturnOn(rentalManageDto.getExpectedReturnOn());
             rentalManage.setStatus(rentalManageDto.getStatus());
             rentalManage.setStock(stock);
-
+            
             // データベースへの保存
             this.rentalManageRepository.save(rentalManage);
         } catch (Exception e) {
@@ -136,8 +138,30 @@ public class RentalManageService {
         } else if (status == RentalStatus.CANCELED.getValue()) {
             //レンタルキャンセル日時が設定
             rentalManage.setCanceledAt(timestamp);
-        }
+        }    
 
         return rentalManage;
     }
+   
+    @Transactional
+    public Optional<String> rentalAble(String stockId, Date expected_return_on, Date expected_rental_on){
+        if(rentalManageRepository.count(stockId) == 0){
+          return Optional.of("この本は貸し出せません");
+        }
+        if(rentalManageRepository.addtest(stockId) != rentalManageRepository.addwhetherDay(stockId, expected_return_on,expected_rental_on) ){
+            return Optional.of("この本は貸し出せません");
+        }
+        return Optional.empty();
+    }
+
+    public Optional<String> editrentalAble(String stockId, Long id, Date expected_return_on, Date expected_rental_on){
+        if(rentalManageRepository.count(stockId) == 0){
+          return Optional.of("この本は貸し出せません");
+        }
+        if(rentalManageRepository.whetherDay(stockId, id,expected_return_on,expected_rental_on) != rentalManageRepository.test(stockId, id)){
+            return Optional.of("この本は貸し出せません");
+        }
+        return Optional.empty();
+    }
 }
+    
