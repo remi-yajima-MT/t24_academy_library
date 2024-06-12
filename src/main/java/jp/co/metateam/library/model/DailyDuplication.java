@@ -7,6 +7,10 @@ import java.util.Date;
 
 @Getter
 @Setter
+/*
+ * 利用可能在庫数とそれに紐づく貸出予定日と在庫管理番号
+ * 日付ごとの在庫数のリンク押下時に貸出予定日と在庫管理番号をセットするため
+ */
 public class DailyDuplication {
 
     private String stockId;
