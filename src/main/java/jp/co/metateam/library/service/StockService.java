@@ -21,7 +21,7 @@ import jp.co.metateam.library.repository.BookMstRepository;
 //import jp.co.metateam.library.repository.RentalManageRepository;
 import jp.co.metateam.library.repository.StockRepository;
 import jp.co.metateam.library.model.CalendarDto;
-import jp.co.metateam.library.model.DailyDuplication;
+import jp.co.metateam.library.model.DateCalendarDto;
 
 @Service
 public class StockService {
@@ -132,7 +132,7 @@ public class StockService {
             calendarDto.setTitle(book.getTitle());
             calendarDto.setTotalCount(stockCount.size());
 
-            List<DailyDuplication> dailyDuplication = new ArrayList<>();
+            List<DateCalendarDto> dateCalendarDto = new ArrayList<>();
 
             // 日付ごとの在庫数
             for (int day = 1; day <= daysInMonth; day++) {
@@ -143,7 +143,7 @@ public class StockService {
                 Date date = new Date();
                 date = cl.getTime();
 
-                DailyDuplication dailyList = new DailyDuplication();
+                DateCalendarDto dailyList = new DateCalendarDto();
                 List<Object[]> stockList = stockRepository.calender(book.getId(), date);
 
                 dailyList.setExpectedRentalOn(date);
@@ -156,11 +156,11 @@ public class StockService {
 
                 dailyList.setDailyCount(stockList.size());
 
-                dailyDuplication.add(dailyList);
+                dateCalendarDto.add(dailyList);
 
             }
 
-            calendarDto.setCountAvailableRental(dailyDuplication);
+            calendarDto.setCountAvailableRental(dateCalendarDto);
             values.add(calendarDto);
         }
 
