@@ -102,8 +102,8 @@ public class StockService {
 
     public List<Object> generateDaysOfWeek(int year, int month, LocalDate startDate, int daysInMonth) {
         List<Object> daysOfWeek = new ArrayList<>();
-        for (int dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth++) {
-            LocalDate date = LocalDate.of(year, month, dayOfMonth);
+        for (int day = 1; day <= daysInMonth; day++) {
+            LocalDate date = LocalDate.of(year, month, day);
             DateTimeFormatter formmater = DateTimeFormatter.ofPattern("dd(E)", Locale.JAPANESE);
             daysOfWeek.add(date.format(formmater));
         }
@@ -133,7 +133,7 @@ public class StockService {
             calendarDto.setTitle(book.getTitle());
             calendarDto.setTotalCount(stockCount.size());
 
-            List<DateCalendarDto> dailyDuplication = new ArrayList<>();
+            List<DateCalendaDto> dateCalendarDto = new ArrayList<>();
 
             // 日付ごとの在庫数
             for (int day = 1; day <= daysInMonth; day++) {
@@ -148,6 +148,7 @@ public class StockService {
                 List<Object[]> stockList = stockRepository.calender(book.getId(), date);
 
                 dailyList.setExpectedRentalOn(date);
+
                 if (stockList != null && !stockList.isEmpty()) {
                     dailyList.setStockId(stockList.get(0)[0].toString());
                     dailyList.setDailyCount(stockList.size());
@@ -155,11 +156,11 @@ public class StockService {
                     dailyList.setStockId(null);
                 }
 
-                dailyDuplication.add(dailyList);
+                dateCalendarDto.add(dailyList);
 
             }
 
-            calendarDto.setCountAvailableRental(dailyDuplication);
+            calendarDto.setCountAvailableRental(dateCalendarDto);
             values.add(calendarDto);
         }
 
