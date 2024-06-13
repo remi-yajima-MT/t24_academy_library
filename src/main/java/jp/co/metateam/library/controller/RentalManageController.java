@@ -122,11 +122,11 @@ public class RentalManageController {
             if (result.hasErrors()) {
                 throw new Exception("Validation error.");
             }
-            Optional<String> a = rentalManageService.rentalAble(rentalManageDto.getStockId(),
+            Optional<String> rentalAbleMessage = rentalManageService.rentalAble(rentalManageDto.getStockId(),
                     new java.sql.Date(rentalManageDto.getExpectedRentalOn().getTime()),
                     new java.sql.Date(rentalManageDto.getExpectedReturnOn().getTime()));
-            if (a.isPresent()) {
-                FieldError fieldError = new FieldError("rentalManageDto", "status", a.get());
+            if (rentalAbleMessage.isPresent()) {
+                FieldError fieldError = new FieldError("rentalManageDto", "status", rentalAbleMessage.get());
                 result.addError(fieldError);
             }
             // 登録処理
@@ -188,23 +188,23 @@ public class RentalManageController {
                     rentalManageDto.getExpectedReturnOn());
             if (dayError.isPresent()) {
                 FieldError fieldError = new FieldError("rentalManageDto", "expectedReturnOn", dayError.get());
-                // dateErrorから取得したエラーメッセージをfieldErrorに入れる
+                // dayErrorから取得したエラーメッセージをfieldErrorに入れる
                 result.addError(fieldError);
                 // resultにエラーの情報を入れる
                 throw new Exception("Validation error");
                 // エラーを投げる
             }
 
-            Optional<String> c = rentalManageService.Account(rentalManageDto.getEmployeeId());
-            if (c.isPresent()) {
+            Optional<String> AccountErrorMessage = rentalManageService.Account(rentalManageDto.getEmployeeId());
+            if (AccountErrorMessage.isPresent()) {
                 FieldError fieldError = new FieldError("rentalManageDto", "employeeId", c.get());
                 result.addError(fieldError);
                 throw new Exception("Validetion error");
             }
-            Optional<String> b = rentalManageService.editrentalAble(rentalManageDto.getStockId(),
+            Optional<String> editRentalErrorMessage = rentalManageService.editrentalAble(rentalManageDto.getStockId(),
                     rentalManageDto.getId(), new java.sql.Date(rentalManageDto.getExpectedReturnOn().getTime()),
                     new java.sql.Date(rentalManageDto.getExpectedRentalOn().getTime()));
-            if (b.isPresent()) {
+            if (editRentalErrorMessage.isPresent()) {
                 FieldError fieldError = new FieldError("rentalManageDto", "status", b.get());
                 result.addError(fieldError);
                 throw new Exception("Validetion error");
