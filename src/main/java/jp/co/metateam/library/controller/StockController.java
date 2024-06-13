@@ -146,14 +146,14 @@ public class StockController {
         Integer daysInMonth = startDate.lengthOfMonth();
 
         List<Object> daysOfWeek = this.stockService.generateDaysOfWeek(targetYear, targetMonth, startDate, daysInMonth);
-        List<CalendarDto> stocks = this.stockService.generateValues(targetYear, targetMonth, daysInMonth);
+        List<CalendarDto> calendarList = this.stockService.generateValues(targetYear, targetMonth, daysInMonth);
 
         model.addAttribute("targetYear", targetYear);
         model.addAttribute("targetMonth", targetMonth);
         model.addAttribute("daysOfWeek", daysOfWeek);
         model.addAttribute("daysInMonth", daysInMonth);
 
-        model.addAttribute("stocks", stocks);
+        model.addAttribute("calendarList", calendarList);
 
         return "stock/calendar";
     }

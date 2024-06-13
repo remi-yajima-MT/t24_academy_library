@@ -21,7 +21,8 @@ import jp.co.metateam.library.repository.BookMstRepository;
 //import jp.co.metateam.library.repository.RentalManageRepository;
 import jp.co.metateam.library.repository.StockRepository;
 import jp.co.metateam.library.model.CalendarDto;
-import jp.co.metateam.library.model.DailyDuplication;
+import jp.co.metateam.library.model.DateCalendarDto;
+
 
 @Service
 public class StockService {
@@ -122,8 +123,8 @@ public class StockService {
          * 書籍分ループ
          * 取得した書籍名を「書籍名」に表示
          */
-        for (int i = 0; i < countBylendableBooks.size(); i++) {
-            BookMst book = countBylendableBooks.get(i);
+        for (int bookindex = 0; bookindex < countBylendableBooks.size(); bookindex++) {
+            BookMst book = countBylendableBooks.get(bookindex);
 
             List<Stock> stockCount = this.stockRepository.findByBookMstIdAndStatus(book.getId(),
                     Constants.STOCK_AVAILABLE);
@@ -132,24 +133,27 @@ public class StockService {
             calendarDto.setTitle(book.getTitle());
             calendarDto.setTotalCount(stockCount.size());
 
-            List<DailyDuplication> dailyDuplication = new ArrayList<>();
+            List<DateCalendarDto> dailyDuplication = new ArrayList<>();
 
             // 日付ごとの在庫数
-            for (int dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth++) {
+            for (int day = 1; day <= daysInMonth; day++) {
                 Calendar cl = Calendar.getInstance();
                 cl.set(Calendar.YEAR, year);
                 cl.set(Calendar.MONTH, month - 1);
-                cl.set(Calendar.DATE, dayOfMonth);
+                cl.set(Calendar.DATE, day);
                 Date date = new Date();
                 date = cl.getTime();
 
-                DailyDuplication dailyList = new DailyDuplication();
+                DateCalendarDto dailyList = new DateCalendarDto();
                 List<Object[]> stockList = stockRepository.calender(book.getId(), date);
 
                 dailyList.setExpectedRentalOn(date);
-
-                dailyList.setStockId(stockList.isEmpty() ? null : stockList.get(0)[0].toString());
-                dailyList.setDailyCount(stockList.size());
+                if (stockList != null && !stockList.isEmpty()) {
+                    dailyList.setStockId(stockList.get(0)[0].toString());
+                    dailyList.setDailyCount(stockList.size());
+                } else {
+                    dailyList.setStockId(null);
+                }
 
                 dailyDuplication.add(dailyList);
 

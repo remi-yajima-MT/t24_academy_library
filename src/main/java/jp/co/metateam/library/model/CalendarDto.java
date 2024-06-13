@@ -13,6 +13,6 @@ public class CalendarDto {
 
     private int totalCount;
 
-    private List<DailyDuplication> countAvailableRental;
+    private List<DateCalendarDto> countAvailableRental;
 
 }
